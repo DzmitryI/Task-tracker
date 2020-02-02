@@ -1,0 +1,29 @@
+.wrapper {
+  min-height: calc(100vh - 15px);
+  margin: 15px auto 0;
+}
+#inputColorApp {
+  display: block;
+  margin: 0 auto;
+  border: none;
+  width: 40px;
+  height: 40px;
+}
+.labelColorApp {
+  display: block;
+  text-align: center;
+}
+#inputColor {
+  width: 35px;
+  height: 35px;
+  border: none;
+  padding: 0;
+}
+.btn-edit,
+.btn-warning {
+  display: none;
+}
+.view-wrapper{
+  display: flex;
+  justify-content: space-evenly;
+}
