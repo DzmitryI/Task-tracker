@@ -4,7 +4,7 @@ if (localStorage.getItem('viewList') === 'true') {
   clickViewList();
 } else {
   clickViewBorder();
-}
+};
 
 function clickViewList() {
   currentTasks.style.display = 'block';
@@ -12,7 +12,7 @@ function clickViewList() {
   viewList.classList.add('active');
   viewBorder.classList.remove('active');
   localStorage.setItem('viewList', true);
-}
+};
 
 function clickViewList() {
   currentTasks.style.display = 'block';
@@ -20,7 +20,7 @@ function clickViewList() {
   viewList.classList.add('active');
   viewBorder.classList.remove('active');
   localStorage.setItem('viewList', true);
-}
+};
 
 viewList.addEventListener('click', clickViewList, true);
 
@@ -36,6 +36,6 @@ function clickViewBorder() {
   viewList.classList.remove('active');
   viewBorder.classList.add('active');
   localStorage.setItem('viewList', false);
-}
+};
 
 viewBorder.addEventListener('click', clickViewBorder, true);

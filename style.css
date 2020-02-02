@@ -23,6 +23,7 @@
 .btn-warning {
   display: none;
 }
+
 .view-wrapper{
   display: flex;
   justify-content: space-evenly;

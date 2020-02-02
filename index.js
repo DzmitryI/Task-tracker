@@ -103,18 +103,6 @@ document.addEventListener('click', ({ target }) => {
     target.parentNode.children[1].style.display = 'block';
     target.parentNode.children[2].style.display = 'none';
   }
-  // if (target.classList[1] === 'btn-info') {
-  //   const btnEdit = document.querySelector('.btn-edit');
-  //   const btnAdd = document.querySelector('.btn-add');
-  //   modal.classList.add('show');
-  //   modal.style.display = 'block';
-  //   modal.removeAttribute('aria-hidden');
-  //   modal.setAttribute('aria-modal', true);
-  //   document.body.classList.add('modal-open');
-  //   document.body.appendChild(modalBackdrop);
-  //   btnEdit.style.display = 'block';
-  //   btnAdd.style.display = 'none';
-  // }
   if (target.classList[1] === 'btn-danger') {
     target.parentNode.parentNode.parentNode.parentNode.removeChild(target.parentNode.parentNode.parentNode);
   }

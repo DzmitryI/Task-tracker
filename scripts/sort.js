@@ -88,7 +88,7 @@ function sort(priority, val = 'down') {
     .forEach(function (node) {
       parent.appendChild(node)
     });
-}
+};
 
 sortNumericUpAlt.addEventListener('click', () => {
   sort(false, 'up');
