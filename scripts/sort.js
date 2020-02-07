@@ -19,17 +19,26 @@ if (localStorage.getItem('sortPriorityUp') === 'true') {
   sort(true, 'up');
 }
 
-const priorityVal = (val) => {
-  if (val === 'Low priority') {
-    return 0;
-  } else if (val === 'High priority') {
-    return 2;
-  } else {
-    return 1;
-  }
-}
+// const priorityVal = (val) => {
+//   if (val === 'Low priority') {
+//     return 0;
+//   } else if (val === 'High priority') {
+//     return 2;
+//   } else {
+//     return 1;
+//   }
+// }
 
 function sort(priority, val = 'down') {
+  const priorityVal = (val) => {
+    if (val === 'Low priority') {
+      return 0;
+    } else if (val === 'High priority') {
+      return 2;
+    } else {
+      return 1;
+    }
+  }
   if (priority) {
     if (val === 'up') {
       sortPriorityDown.classList.remove('active');
@@ -88,7 +97,7 @@ function sort(priority, val = 'down') {
     .forEach(function (node) {
       parent.appendChild(node)
     });
-};
+}
 
 sortNumericUpAlt.addEventListener('click', () => {
   sort(false, 'up');
