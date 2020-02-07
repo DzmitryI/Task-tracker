@@ -2,6 +2,9 @@ const sortNumericUpAlt = document.querySelector('.sort-numeric-up-alt');
 const sortNumericUp = document.querySelector('.sort-numeric-up');
 const sortPriorityDown = document.querySelector('.sort-priority-down');
 const sortPriorityUp = document.querySelector('.sort-priority-up');
+const sortPriorityLow = document.querySelector('.sort-priority-low');
+const sortPriorityMedium = document.querySelector('.sort-priority-medium');
+const sortPriorityHigh = document.querySelector('.sort-priority-high');
 
 if (localStorage.getItem('sortNumericUpAlt') === 'true') {
   sort(false, 'up');
@@ -19,15 +22,65 @@ if (localStorage.getItem('sortPriorityUp') === 'true') {
   sort(true, 'up');
 }
 
-// const priorityVal = (val) => {
-//   if (val === 'Low priority') {
-//     return 0;
-//   } else if (val === 'High priority') {
-//     return 2;
-//   } else {
-//     return 1;
-//   }
-// }
+if (localStorage.getItem('sortPriorityLow') === 'true') {
+  filter('low');
+}
+
+if (localStorage.getItem('sortPriorityMedium') === 'true') {
+  filter('medium');
+}
+
+if (localStorage.getItem('sortPriorityHigh') === 'true') {
+  filter('high');
+}
+
+function filter(val, status = 'false') {
+  // sortPriorityLow.classList.remove('active');
+  // sortPriorityMedium.classList.remove('active');
+  // sortPriorityHigh.classList.remove('active');
+  if (val === 'low') {
+    if (!sortPriorityLow.classList.contains('active')) {
+      sortPriorityLow.classList.add('active');
+      sortPriorityMedium.classList.remove('active');
+      sortPriorityHigh.classList.remove('active');
+    } else {
+      sortPriorityLow.classList.remove('active');
+    }
+  } else if (val === 'medium') {
+    if (!sortPriorityMedium.classList.contains('active')) {
+      sortPriorityMedium.classList.add('active');
+      sortPriorityLow.classList.remove('active');
+      sortPriorityHigh.classList.remove('active');
+    } else {
+      sortPriorityMedium.classList.remove('active');
+    }
+  } else if (val === 'high') {
+    if (!sortPriorityHigh.classList.contains('active')) {
+      sortPriorityHigh.classList.add('active');
+      sortPriorityLow.classList.remove('active');
+      sortPriorityMedium.classList.remove('active');
+    } else {
+      sortPriorityHigh.classList.remove('active');
+    }
+  }
+  for (const property of currentTasks.children) {
+    let curPruority = property.children[0].children[0].children[1].children[0].innerText.split(' ')[0].toLowerCase();
+    if (curPruority !== val) {
+      filterTasks.appendChild(property);
+    }
+  }
+  for (const property of filterTasks.children) {
+    let curPruority = property.children[0].children[0].children[1].children[0].innerText.split(' ')[0].toLowerCase();
+    if (status && curPruority === val) {
+      currentTasks.appendChild(property);
+    } else if (!status) {
+      currentTasks.appendChild(property);
+    }
+  }
+  localStorage.setItem('sortPriorityLow', sortPriorityLow.classList.contains('active'));
+  localStorage.setItem('sortPriorityMedium', sortPriorityMedium.classList.contains('active'));
+  localStorage.setItem('sortPriorityHigh', sortPriorityHigh.classList.contains('active'));
+}
 
 function sort(priority, val = 'down') {
   const priorityVal = (val) => {
@@ -113,4 +166,16 @@ sortPriorityDown.addEventListener('click', () => {
 
 sortPriorityUp.addEventListener('click', () => {
   sort(true, 'up');
+}, true);
+
+sortPriorityLow.addEventListener('click', () => {
+  filter('low', !sortPriorityLow.classList.contains('active'));
+}, true);
+
+sortPriorityMedium.addEventListener('click', () => {
+  filter('medium', !sortPriorityMedium.classList.contains('active'));
+}, true);
+
+sortPriorityHigh.addEventListener('click', () => {
+  filter('high', !sortPriorityHigh.classList.contains('active'));
 }, true);
