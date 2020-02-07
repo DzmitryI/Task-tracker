@@ -1,6 +1,7 @@
 const modal = document.getElementById('exampleModal');
 const currentTasks = document.getElementById('currentTasks');
 const completedTasks = document.getElementById('completedTasks');
+const filterTasks = document.getElementById('filterTasks');
 const viewBorder = document.querySelector('.view-border');
 const btnEdit = document.querySelector('.btn-edit');
 
@@ -11,8 +12,12 @@ const state = {
   sortNumericUp: '',
   sortPriorityDown: '',
   sortPriorityUp: '',
+  sortPriorityLow: '',
+  sortPriorityMedium: '',
+  sortPriorityHigh: '',
   currentTasks: '',
   completedTasks: '',
+  filterTasks: '',
 };
 
 if (!!localStorage.getItem('currentTasks') === true) {
@@ -21,6 +26,10 @@ if (!!localStorage.getItem('currentTasks') === true) {
 
 if (!!localStorage.getItem('completedTasks') === true) {
   completedTasks.innerHTML = localStorage.getItem('completedTasks');
+}
+
+if (!!localStorage.getItem('filterTasks') === true) {
+  filterTasks.innerHTML = localStorage.getItem('filterTasks');
 }
 
 const currentNumberOfTask = () => {
@@ -61,7 +70,7 @@ document.addEventListener('submit', (event) => {
     const modalBackdrop = document.querySelector('.modal-backdrop');
     const newTask = document.createElement('li');
     newTask.className = 'list-group-item d-flex w-100 mb-2';
-    newTask.id = currentTasks.children.length + completedTasks.children.length;
+    newTask.id = (+new Date).toString(16);
     newTask.style.backgroundColor = event.target.children[3].children[1].children[0].value;
     newTask.innerHTML =
       `<div class="w-100 mr-2">
@@ -178,6 +187,8 @@ document.addEventListener('click', ({ target }) => {
     const curTask = document.getElementById(`${modal.getAttribute('data-id')}`);
     curTask.children[0].children[0].children[0].innerText = target.parentElement.parentElement.parentElement.children[0].children[1].children[0].value;
     curTask.children[0].children[1].innerText = target.parentElement.parentElement.parentElement.children[1].children[1].children[0].value;
+    curTask.children[0].children[0].children[1].children[0].innerText = currentPriority(target.parentElement.parentElement.parentElement.children[2].children[0].children[1].children);
+    curTask.children[0].children[0].children[1].children[1].innerText = currentTime();
     curTask.style.backgroundColor = target.parentElement.parentElement.parentElement.children[3].children[1].children[0].value;
     modal.classList.remove('show');
     modal.setAttribute('aria-hidden', true);
@@ -198,6 +209,11 @@ window.addEventListener('beforeunload', function (e) {
     localStorage.setItem('completedTasks', '');
   } else {
     localStorage.setItem('completedTasks', completedTasks.innerHTML);
+  }
+  if (!filterTasks.children.length) {
+    localStorage.setItem('filterTasks', '');
+  } else {
+    localStorage.setItem('filterTasks', filterTasks.innerHTML);
   }
 });
 
