@@ -2,6 +2,7 @@ const modal = document.getElementById('exampleModal');
 const currentTasks = document.getElementById('currentTasks');
 const completedTasks = document.getElementById('completedTasks');
 const viewBorder = document.querySelector('.view-border');
+const btnEdit = document.querySelector('.btn-edit');
 
 const state = {
   viewList: '',
@@ -47,11 +48,20 @@ const currentPriority = (val) => {
   }
 }
 
+const rgb2hex = (rgb) => {
+  rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+  function hex(x) {
+    return ("0" + parseInt(x).toString(16)).slice(-2);
+  }
+  return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+}
+
 document.addEventListener('submit', (event) => {
   if (event.target.type = 'submit') {
     const modalBackdrop = document.querySelector('.modal-backdrop');
     const newTask = document.createElement('li');
     newTask.className = 'list-group-item d-flex w-100 mb-2';
+    newTask.id = currentTasks.children.length + completedTasks.children.length;
     newTask.style.backgroundColor = event.target.children[3].children[1].children[0].value;
     newTask.innerHTML =
       `<div class="w-100 mr-2">
@@ -86,6 +96,23 @@ document.addEventListener('submit', (event) => {
     document.body.classList.remove('modal-open');
     document.body.removeChild(modalBackdrop);
     currentNumberOfTask();
+
+    if (localStorage.getItem('sortNumericUpAlt') === 'true') {
+      sort(false, 'up');
+    }
+
+    if (localStorage.getItem('sortNumericUp') === 'true') {
+      sort(false);
+    }
+
+    if (localStorage.getItem('sortPriorityDown') === 'true') {
+      sort(true);
+    }
+
+    if (localStorage.getItem('sortPriorityUp') === 'true') {
+      sort(true, 'up');
+    }
+
     event.preventDefault();
   }
 });
@@ -103,20 +130,60 @@ document.addEventListener('click', ({ target }) => {
     target.parentNode.children[1].style.display = 'block';
     target.parentNode.children[2].style.display = 'none';
   }
-  // if (target.classList[1] === 'btn-info') {
-  //   const btnEdit = document.querySelector('.btn-edit');
-  //   const btnAdd = document.querySelector('.btn-add');
-  //   modal.classList.add('show');
-  //   modal.style.display = 'block';
-  //   modal.removeAttribute('aria-hidden');
-  //   modal.setAttribute('aria-modal', true);
-  //   document.body.classList.add('modal-open');
-  //   document.body.appendChild(modalBackdrop);
-  //   btnEdit.style.display = 'block';
-  //   btnAdd.style.display = 'none';
-  // }
+  if (target.classList[1] === 'btn-info') {
+    const btnAdd = document.querySelector('.btn-add');
+    modal.classList.add('show');
+    modal.style.display = 'block';
+    modal.removeAttribute('aria-hidden');
+    modal.setAttribute('aria-modal', true);
+    document.body.classList.add('modal-open');
+    btnEdit.style.display = 'inline-block';
+    btnAdd.style.display = 'none';
+    modal.setAttribute('data-id', target.parentElement.parentElement.parentElement.id);
+    modal.children[0].children[0].children[0].children[0].innerText = 'Edd task';
+    modal.children[0].children[0].children[1].children[0].children[0].children[1].children[0].value =
+      target.parentElement.parentElement.parentElement.children[0].children[0].children[0].innerText;
+    modal.children[0].children[0].children[1].children[0].children[1].children[1].children[0].value =
+      target.parentElement.parentElement.parentElement.children[0].children[1].innerText;
+    const curPriority = target.parentElement.parentElement.parentElement.children[0].children[0].children[1].innerText.split(' ')[0];
+    switch (curPriority) {
+      case "Low":
+        modal.children[0].children[0].children[1].children[0].children[2].children[0].children[1].children[0].children[0].checked = true;
+        break;
+      case "Medium":
+        modal.children[0].children[0].children[1].children[0].children[2].children[0].children[1].children[1].children[0].checked = true;
+        break;
+      case "High":
+        modal.children[0].children[0].children[1].children[0].children[2].children[0].children[1].children[2].children[0].checked = true;
+        break;
+      default:
+        break;
+    }
+    modal.children[0].children[0].children[1].children[0].children[3].children[1].children[0].value =
+      rgb2hex(target.parentElement.parentElement.parentElement.style.backgroundColor);
+
+  }
   if (target.classList[1] === 'btn-danger') {
     target.parentNode.parentNode.parentNode.parentNode.removeChild(target.parentNode.parentNode.parentNode);
+  }
+  if (target.parentElement.classList[0] === 'close' || target.classList[0] === 'btn-close') {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', true);
+    modal.setAttribute('aria-modal', false);
+    modal.style.display = 'none';
+    document.body.classList.remove('modal-open');
+
+  }
+  if (target.classList[0] === 'btn-edit') {
+    const curTask = document.getElementById(`${modal.getAttribute('data-id')}`);
+    curTask.children[0].children[0].children[0].innerText = target.parentElement.parentElement.parentElement.children[0].children[1].children[0].value;
+    curTask.children[0].children[1].innerText = target.parentElement.parentElement.parentElement.children[1].children[1].children[0].value;
+    curTask.style.backgroundColor = target.parentElement.parentElement.parentElement.children[3].children[1].children[0].value;
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', true);
+    modal.setAttribute('aria-modal', false);
+    modal.style.display = 'none';
+    document.body.classList.remove('modal-open');
   }
   currentNumberOfTask();
 })
