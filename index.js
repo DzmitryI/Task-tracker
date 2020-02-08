@@ -4,6 +4,7 @@ const completedTasks = document.getElementById('completedTasks');
 const filterTasks = document.getElementById('filterTasks');
 const viewBorder = document.querySelector('.view-border');
 const btnEdit = document.querySelector('.btn-edit');
+const btnAdd = document.querySelector('.btn-add');
 
 const state = {
   viewList: '',
@@ -43,9 +44,10 @@ const currentTime = () => {
   let time = new Date();
   let getHours = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
   let getMinutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
+  let getSeconds = time.getSeconds() < 10 ? '0' + time.getSeconds() : time.getSeconds();
   let getDate = time.getDate() < 10 ? '0' + time.getDate() : time.getDate();
   let getMonth = time.getMonth() < 10 ? '0' + time.getMonth() : time.getMonth();
-  return `${getHours}.${getMinutes} ${getDate}.${getMonth}.${time.getFullYear()}`;
+  return `${getHours}.${getMinutes}.${getSeconds} ${getDate}.${getMonth}.${time.getFullYear()}`;
 }
 
 const currentPriority = (val) => {
@@ -99,6 +101,9 @@ document.addEventListener('submit', (event) => {
     event.target.children[1].children[1].children[0].value = '';
     currentTasks.appendChild(newTask);
     modal.classList.remove('show');
+    modal.children[0].children[0].children[0].children[0].innerText = 'Add task';
+    btnEdit.style.display = 'none';
+    btnAdd.style.display = 'inline-block';
     modal.setAttribute('aria-hidden', true);
     modal.setAttribute('aria-modal', false);
     modal.style.display = 'none';
@@ -140,7 +145,6 @@ document.addEventListener('click', ({ target }) => {
     target.parentNode.children[2].style.display = 'none';
   }
   if (target.classList[1] === 'btn-info') {
-    const btnAdd = document.querySelector('.btn-add');
     modal.classList.add('show');
     modal.style.display = 'block';
     modal.removeAttribute('aria-hidden');
@@ -186,14 +190,20 @@ document.addEventListener('click', ({ target }) => {
   if (target.classList[0] === 'btn-edit') {
     const curTask = document.getElementById(`${modal.getAttribute('data-id')}`);
     curTask.children[0].children[0].children[0].innerText = target.parentElement.parentElement.parentElement.children[0].children[1].children[0].value;
+    target.parentElement.parentElement.parentElement.children[0].children[1].children[0].value = '';
     curTask.children[0].children[1].innerText = target.parentElement.parentElement.parentElement.children[1].children[1].children[0].value;
+    target.parentElement.parentElement.parentElement.children[1].children[1].children[0].value = '';
     curTask.children[0].children[0].children[1].children[0].innerText = currentPriority(target.parentElement.parentElement.parentElement.children[2].children[0].children[1].children);
     curTask.children[0].children[0].children[1].children[1].innerText = currentTime();
     curTask.style.backgroundColor = target.parentElement.parentElement.parentElement.children[3].children[1].children[0].value;
+    target.parentElement.parentElement.parentElement.children[3].children[1].children[0].value = "#9bed64";
     modal.classList.remove('show');
     modal.setAttribute('aria-hidden', true);
     modal.setAttribute('aria-modal', false);
     modal.style.display = 'none';
+    modal.children[0].children[0].children[0].children[0].innerText = 'Add task';
+    btnEdit.style.display = 'none';
+    btnAdd.style.display = 'inline-block';
     document.body.classList.remove('modal-open');
   }
   currentNumberOfTask();

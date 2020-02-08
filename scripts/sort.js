@@ -35,9 +35,6 @@ if (localStorage.getItem('sortPriorityHigh') === 'true') {
 }
 
 function filter(val, status = 'false') {
-  // sortPriorityLow.classList.remove('active');
-  // sortPriorityMedium.classList.remove('active');
-  // sortPriorityHigh.classList.remove('active');
   if (val === 'low') {
     if (!sortPriorityLow.classList.contains('active')) {
       sortPriorityLow.classList.add('active');
@@ -63,19 +60,35 @@ function filter(val, status = 'false') {
       sortPriorityHigh.classList.remove('active');
     }
   }
-  for (const property of currentTasks.children) {
-    let curPruority = property.children[0].children[0].children[1].children[0].innerText.split(' ')[0].toLowerCase();
-    if (curPruority !== val) {
-      filterTasks.appendChild(property);
+  if (currentTasks.children.length) {
+    const listCur = currentTasks.querySelectorAll('li');
+    const parentCur = listCur[0].parentNode;
+    const arrSortCur = [];
+    for (let i = 0; i < listCur.length; i++) {
+      let curPruority = listCur[i].children[0].children[0].children[1].children[0].innerText.split(' ')[0].toLowerCase();
+      if (curPruority !== val) {
+        arrSortCur.push(parentCur.removeChild(listCur[i]));
+      }
     }
+    arrSortCur.forEach(function (node) {
+      filterTasks.appendChild(node)
+    });
   }
-  for (const property of filterTasks.children) {
-    let curPruority = property.children[0].children[0].children[1].children[0].innerText.split(' ')[0].toLowerCase();
-    if (status && curPruority === val) {
-      currentTasks.appendChild(property);
-    } else if (!status) {
-      currentTasks.appendChild(property);
+  if (filterTasks.children.length) {
+    const listFilt = filterTasks.querySelectorAll('li');
+    const parentFilt = listFilt[0].parentNode;
+    const arrSortFilt = [];
+    for (let i = 0; i < listFilt.length; i++) {
+      let curPruority = listFilt[i].children[0].children[0].children[1].children[0].innerText.split(' ')[0].toLowerCase();
+      if (status && curPruority === val) {
+        arrSortFilt.push(parentFilt.removeChild(listFilt[i]));
+      } else if (!status) {
+        arrSortFilt.push(parentFilt.removeChild(listFilt[i]));
+      }
     }
+    arrSortFilt.forEach(function (node) {
+      currentTasks.appendChild(node)
+    });
   }
   localStorage.setItem('sortPriorityLow', sortPriorityLow.classList.contains('active'));
   localStorage.setItem('sortPriorityMedium', sortPriorityMedium.classList.contains('active'));
